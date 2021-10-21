@@ -1,9 +1,9 @@
 import React from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
+import { useAuth } from '../../hooks/auth'
+import { UserPhoto } from '../UserPhoto'
 import { styles } from './styles'
 import LogoSvg from '../../assets/logo.svg'
-import { UserPhoto } from '../UserPhoto'
-import { useAuth } from '../../hooks/auth'
 
 export function Header() {
   const { user, signOut } = useAuth()

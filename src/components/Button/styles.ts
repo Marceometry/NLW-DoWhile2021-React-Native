@@ -10,6 +10,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
   },
+  buttonDisabled: {
+    opacity: 0.6,
+  },
   title: {
     fontSize: 14,
     fontFamily: FONTS.BOLD,

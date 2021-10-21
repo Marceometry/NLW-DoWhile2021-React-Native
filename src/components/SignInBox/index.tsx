@@ -6,13 +6,14 @@ import { Button } from '../Button'
 import { styles } from './styles'
 
 export function SignInBox() {
-  const { signIn } = useAuth()
+  const { signIn, isSigningIn } = useAuth()
 
   return (
     <View style={styles.container}>
       <Button
         hasIcon
         onPress={signIn}
+        isLoading={isSigningIn}
         color={COLORS.BLACK_PRIMARY}
         backgroundColor={COLORS.YELLOW}
       >

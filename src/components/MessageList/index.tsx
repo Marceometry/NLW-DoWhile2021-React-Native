@@ -1,28 +1,62 @@
-import React from 'react'
-import { ScrollView } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { ScrollView, Text, View } from 'react-native'
+import { api } from '../../services/api'
 import { Message } from '../Message'
+import { MessageProps } from '../Message/types'
 import { styles } from './styles'
+import { io } from 'socket.io-client'
 
-const message = {
-  id: 'string',
-  text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam accusamus laboriosam fugit? Libero, esse iste ullam illum eaque veritatis tempora asperiores fugit.',
-  user: {
-    name: 'Marcelino',
-    login: 'Marceometry',
-    avatar_url: 'https://github.com/Marceometry.png',
-  },
-}
+let messagesQueue: MessageProps[] = []
+
+const socket = io(String(api.defaults.baseURL))
+socket.on('new_message', (message: MessageProps) => {
+  messagesQueue.push(message)
+  console.log(message)
+})
 
 export function MessageList() {
+  const [currentMessages, setCurrentMessages] = useState<MessageProps[]>([])
+
+  useEffect(() => {
+    async function fetchMessages() {
+      const messages = await api.get<MessageProps[]>('/messages/last3')
+      setCurrentMessages(messages.data)
+    }
+
+    fetchMessages()
+  }, [])
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (messagesQueue.length > 0) {
+        setCurrentMessages((prevState) => [
+          messagesQueue[0],
+          prevState[0],
+          prevState[1],
+        ])
+
+        messagesQueue.shift()
+      }
+    }, 3000)
+
+    return () => clearInterval(timer)
+  }, [])
+
   return (
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.content}
       keyboardShouldPersistTaps='never'
     >
-      <Message data={message} />
-      <Message data={message} />
-      <Message data={message} />
+      {currentMessages.length > 0 ? (
+        currentMessages.map((message) => (
+          <Message key={message.id} data={message} />
+        ))
+      ) : (
+        <View style={styles.emptyList}>
+          <Text style={styles.emptyListMessage}>Não há mensagens</Text>
+        </View>
+      )}
     </ScrollView>
   )
 }

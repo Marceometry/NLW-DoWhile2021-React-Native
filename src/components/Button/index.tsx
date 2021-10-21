@@ -9,6 +9,7 @@ export function Button({
   hasIcon,
   color,
   backgroundColor,
+  disabled = false,
   isLoading = false,
   ...rest
 }: ButtonProps) {
@@ -16,8 +17,12 @@ export function Button({
     <TouchableOpacity
       {...rest}
       activeOpacity={0.8}
-      disabled={isLoading}
-      style={[styles.button, { backgroundColor }]}
+      disabled={isLoading || disabled}
+      style={[
+        styles.button,
+        disabled && styles.buttonDisabled,
+        { backgroundColor },
+      ]}
     >
       {isLoading ? (
         <ActivityIndicator color={color} style={styles.icon} />
