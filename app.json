@@ -2,6 +2,7 @@
   "expo": {
     "name": "dowhilemobile",
     "slug": "dowhilemobile",
+    "scheme": "dowhilemobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

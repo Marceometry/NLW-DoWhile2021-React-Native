@@ -1,5 +1,6 @@
 import React from 'react'
 import AppLoading from 'expo-app-loading'
+import { AuthProvider } from './src/hooks/auth'
 import { StatusBar } from 'expo-status-bar'
 import {
   useFonts,
@@ -15,9 +16,9 @@ export default function App() {
   if (!fontsLoaded) return <AppLoading />
 
   return (
-    <>
-      <StatusBar style='light' />
+    <AuthProvider>
+      <StatusBar style='light' backgroundColor='transparent' translucent />
       <Home />
-    </>
+    </AuthProvider>
   )
 }
