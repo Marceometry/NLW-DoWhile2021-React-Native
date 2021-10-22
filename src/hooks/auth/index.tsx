@@ -9,6 +9,7 @@ import {
   User,
 } from './types'
 import { api } from '../../services/api'
+import { Alert } from 'react-native'
 
 const CLIENT_ID = 'bdccdf9e618bddd7dbba'
 const USER_STORAGE = '@dowhilemobile:user'
@@ -55,7 +56,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         const { token, user } = authResponse.data as AuthResponse
 
+        if (!user || !token) {
+          Alert.alert('Algo deu errado')
+          return
+        }
+
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+
+        console.log(token, user)
 
         await AsyncStorage.setItem(USER_STORAGE, JSON.stringify(user))
         await AsyncStorage.setItem(TOKEN_STORAGE, token)
